@@ -2,11 +2,14 @@ package com.example.demo.core;
 
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.StudentNotFoundException;
+import com.example.demo.integration.BookingClient;
+import com.example.demo.model.BookingRequest;
 import com.example.demo.integration.ChuckClient;
 import com.example.demo.model.Student;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,13 +19,22 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
     private final ChuckClient chuckClient;
+    private final BookingClient bookingClient;
 
     public List<Student> getAllStudents() {
         return studentRepository.findAll();
     }
 
     public Optional<Student> getStudent(Long studentId) {
-        return studentRepository.findById(studentId);
+//        try {
+//            return studentRepository.findById(studentId);
+//        } catch (Exception e) {
+//            throw new StudentNotFoundException("Студент с id = " + studentId + " не был найден в базе данных");
+//        }
+        return Optional.ofNullable(studentRepository.findById(studentId)
+                .orElseThrow(() -> new StudentNotFoundException(
+                        "Студент с id = " + studentId + " не был найден в базе данных"
+                )));
     }
 
     public void addStudent(Student student) {
@@ -33,6 +45,15 @@ public class StudentService {
                     "Email " + student.getEmail() + " taken");
         }
         student.setJoke(chuckClient.getJoke().getValue());
+        student.setBookingId(bookingClient.createBooking(new BookingRequest(
+                student.getName(),
+                "",
+                250,
+                true,
+                LocalDate.now(),
+                LocalDate.now(),
+                "wi-fi"
+        )));
         studentRepository.save(student);
     }
 

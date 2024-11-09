@@ -46,4 +46,18 @@ public class Student {
         this.email = email;
         this.gender = gender;
     }
+
+//    @Override
+//    public final boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null) return false;
+//        if (getClass() != o.getClass()) return false;
+//
+//        Student otherStudent = (Student) o;
+//
+//        return this.name.equals((otherStudent.name)) &&
+//                this.email.equals((otherStudent.email)) &&
+//                this.gender.equals((otherStudent.gender));
+//    }
+
 }
