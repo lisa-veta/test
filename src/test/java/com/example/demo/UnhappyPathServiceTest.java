@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @WireMockTest(httpPort = 8080)
 @ActiveProfiles("test")
 class UnhappyPathServiceTest {
-    @Value("chuck.url")
-    private String url;
 
     @Autowired
     private TestRestTemplate testTemplate;
@@ -30,7 +28,7 @@ class UnhappyPathServiceTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Test
-    public void error500FromChuckNorrisServiceTest() throws JsonProcessingException {
+    public void error500FromChuckNorrisServiceTest() {
         ChuckResponse chuckResponse = new ChuckResponse("Случайная шутка");
         // arrange
         stubFor(WireMock.get("/jokes/random")

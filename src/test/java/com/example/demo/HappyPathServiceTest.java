@@ -1,9 +1,7 @@
 package com.example.demo;
 
 import com.example.demo.config.ChuckProperties;
-import com.example.demo.model.ChuckResponse;
-import com.example.demo.model.Gender;
-import com.example.demo.model.Student;
+import com.example.demo.model.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.client.WireMock;
@@ -16,12 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.time.LocalDate;
+
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -40,6 +44,18 @@ public class HappyPathServiceTest {
 
     @Test
     public void happyPathServiceTest() throws JsonProcessingException {
+        BookingRequest request =  new BookingRequest(
+                "name",
+                "lastname",
+                100,
+                true,
+                LocalDate.now(),
+                LocalDate.now(),
+                "wi-fi");
+        // Arrange
+        BookingResponse expectedResponse = new BookingResponse(100, request);
+        stubFor(WireMock.post("/booking")
+                .willReturn(okJson(objectMapper.writeValueAsString(expectedResponse))));
         // arrange
         ChuckResponse chuckResponse = new ChuckResponse("Some random joke value");
         stubFor(WireMock.get("/jokes/random")
@@ -52,6 +68,7 @@ public class HappyPathServiceTest {
 
         // asserts
         assertEquals("Some random joke value", extractedStudent.getJoke());
+        assertEquals(100, extractedStudent.getBookingId());
     }
 
     //    @Test

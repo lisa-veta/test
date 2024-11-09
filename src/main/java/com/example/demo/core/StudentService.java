@@ -45,15 +45,15 @@ public class StudentService {
                     "Email " + student.getEmail() + " taken");
         }
         student.setJoke(chuckClient.getJoke().getValue());
-        student.setBookingId(bookingClient.createBooking(new BookingRequest(
-                student.getName(),
-                "",
-                250,
-                true,
-                LocalDate.now(),
-                LocalDate.now(),
-                "wi-fi"
-        )));
+//        student.setBookingId(bookingClient.createBooking(new BookingRequest(
+//                student.getName(),
+//                "",
+//                250,
+//                true,
+//                LocalDate.now(),
+//                LocalDate.now(),
+//                "wi-fi"
+//        )));
         studentRepository.save(student);
     }
 

@@ -15,7 +15,6 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class BookingClient {
 
-    private final ObjectMapper objectMapper;
     private final BookingProperties properties;
     private final RestTemplate restTemplate;
 
@@ -25,21 +24,17 @@ public class BookingClient {
 //            headers.setContentType(MediaType.APPLICATION_JSON);
 //            headers.set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.5993.117 Safari/537.36");
 
-            String requestBody = objectMapper.writeValueAsString(request);
-            //HttpEntity<String> requestEntity = new HttpEntity<>(requestBody, headers);
-            HttpEntity<String> requestEntity = new HttpEntity<>(requestBody);
+            HttpEntity<BookingRequest> requestEntity = new HttpEntity<>(request);
             ResponseEntity<BookingResponse> responseEntity = restTemplate.exchange(
                     properties.getUrl() + "/booking",
                     HttpMethod.POST,
                     requestEntity,
                     BookingResponse.class
             );
+
             return responseEntity.getBody().getBookingId();
         } catch (HttpServerErrorException e) {
             System.err.println("Ошибка сервера: " + e.getMessage());
-            return 0;
-        } catch (JsonProcessingException e) {
-            System.err.println("Ошибка сериализации: " + e.getMessage());
             return 0;
         }
     }
