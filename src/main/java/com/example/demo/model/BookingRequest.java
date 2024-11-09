@@ -1,7 +1,9 @@
 package com.example.demo.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -9,6 +11,8 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookingRequest {
      String firstname;
      String lastname;
@@ -30,13 +34,10 @@ public class BookingRequest {
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 class BookingDates {
      LocalDate checkin;
      LocalDate checkout;
-
-    public BookingDates(LocalDate checkin, LocalDate checkout) {
-        this.checkin = checkin;
-        this.checkout = checkout;
-    }
 }
 

@@ -81,16 +81,16 @@ class StudentServiceTest {
 
         when(chuckClient.getJoke()).thenReturn(jokeResponse);
 
-        //when(bookingClient.createBooking(any())).thenReturn(123);
+        when(bookingClient.createBooking(any())).thenReturn(123);
         when(studentRepository.selectExistsEmail(student.getEmail())).thenReturn(false);
 
         studentService.addStudent(student);
 
         verify(studentRepository, times(1)).save(student);
         verify(chuckClient, times(1)).getJoke();
-        //verify(bookingClient, times(1)).createBooking(any());
+        verify(bookingClient, times(1)).createBooking(any());
         assertEquals("шутка", student.getJoke());
-        //assertEquals(123, student.getBookingId());
+        assertEquals(123, student.getBookingId());
     }
 
     @Test

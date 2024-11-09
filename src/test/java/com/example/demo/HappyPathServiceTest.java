@@ -33,9 +33,6 @@ import static org.mockito.Mockito.when;
 @ActiveProfiles("test")
 public class HappyPathServiceTest {
 
-    @Value("chuck.url")
-    private String url;
-
     @Autowired
     private TestRestTemplate testTemplate;
 
@@ -53,7 +50,8 @@ public class HappyPathServiceTest {
                 LocalDate.now(),
                 "wi-fi");
         // Arrange
-        BookingResponse expectedResponse = new BookingResponse(100, request);
+        int id = 100;
+        BookingResponse expectedResponse = new BookingResponse(id, request);
         stubFor(WireMock.post("/booking")
                 .willReturn(okJson(objectMapper.writeValueAsString(expectedResponse))));
         // arrange
@@ -63,28 +61,12 @@ public class HappyPathServiceTest {
 
         // act
         Student student = new Student("ivan", "test@gmail.com", Gender.MALE);
-        testTemplate.postForEntity("/api/v1/students", student, Void.class);
+        testTemplate.postForEntity("/api/v1/students", student, void.class);
         Student extractedStudent = testTemplate.getForObject("/api/v1/students/1", Student.class);
 
         // asserts
         assertEquals("Some random joke value", extractedStudent.getJoke());
-        assertEquals(100, extractedStudent.getBookingId());
+        assertEquals(id, extractedStudent.getBookingId());
     }
-
-    //    @Test
-//    public void happyPathBookingServiceTest() throws JsonProcessingException {
-//        // arrange
-//        BookingResponse bookingResponse = new BookingResponse();
-//        bookingResponse.setBookingId(1);
-//        stubFor(post("/booking")
-//                .willReturn(okJson(objectMapper.writeValueAsString(bookingResponse))));
-//
-//        // act
-//        BookingRequest request = new BookingRequest("John", "Doe", 100, true, LocalDate.now(), LocalDate.now(), "Wi-Fi");
-//        int bookingId = bookingClient.createBooking(request);
-//
-//        // asserts
-//        assertEquals(123, bookingId);
-//    }
 
 }
