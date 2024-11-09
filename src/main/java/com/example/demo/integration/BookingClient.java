@@ -35,7 +35,7 @@ public class BookingClient {
             return responseEntity.getBody().getBookingId();
         } catch (HttpServerErrorException e) {
             System.err.println("Ошибка сервера: " + e.getMessage());
-            return 0;
+            return -1;
         }
     }
 }

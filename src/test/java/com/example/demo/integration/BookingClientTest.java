@@ -71,15 +71,8 @@ class BookingClientTest {
     public void getBookingIdServerError() {
         // Arrange
         String url = properties.getUrl() + "/booking"; // Исправленный URL
-        int expectedId = 0;
-        BookingRequest request = new BookingRequest(
-                "name",
-                "lastname",
-                100,
-                true,
-                LocalDate.now(),
-                LocalDate.now(),
-                "wi-Fi");
+        int expectedId = -1;
+        BookingRequest request = new BookingRequest();
 
         when(restTemplate.exchange(
                 eq(url), // Исправленный URL

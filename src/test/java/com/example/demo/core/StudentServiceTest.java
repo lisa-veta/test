@@ -71,11 +71,12 @@ class StudentServiceTest {
     @Test
     void getNotExistStudent() {
         Long studentId = 1L;
-        assertThrows(StudentNotFoundException.class, () -> studentService.getStudent(studentId));
+        StudentNotFoundException ex = assertThrows(StudentNotFoundException.class, () -> studentService.getStudent(studentId));
+        assertEquals("Студент с id = " + studentId + " не был найден в базе данных", ex.getMessage());
     }
 
     @Test
-    void addStudent_validEmail_success() {
+    void addStudentWithNotExistingEmail() {
         Student student = new Student(1L, "Иван", "test@gmail.com", null, null, 0);
         ChuckResponse jokeResponse = new ChuckResponse("шутка");
 
@@ -94,7 +95,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void addStudent_existingEmail_throwsBadRequestException() {
+    void addStudentWithExistingEmailThrowsBadRequestException() {
         Student student = new Student(1L, "Иван", "test@gmail.com", null, null, 0);
         when(studentRepository.selectExistsEmail(student.getEmail())).thenReturn(true);
 
